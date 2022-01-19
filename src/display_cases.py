@@ -1,8 +1,7 @@
-import datetime
+from datetime import datetime
 import json
 import os
 import sys
-import time
 
 from PIL import Image, ImageDraw, ImageFont
 from requests import get
@@ -12,17 +11,31 @@ from waveshare_epd import epd1in54_V2 # Update this if needed for a different e-
 Script to retrieve the number of confirmed Covid-19 cases in the past 7 day
 in a local authority, normalise it for the local population, and
 display the results on an e-ink screen.
+
+LTLA_NAME = Lower Tier Local Authority (roughly, borough - not postcode area)
+https://data.gov.uk/dataset/adb48074-34f0-4304-8dc4-e294240ad630/lower-tier-local-authority-to-upper-tier-local-authority-december-2018-lookup-in-england-and-wales-v2
+
+LTLA_POPULATION = population estimate from Wikipedia via Google seach "<area> population mid 2019"
+e.g. "Kingston upon Thames mid 2019" -> 177507 (est)
+
+FONT_FILE should be in assets folder
 '''
 
 # Update these for your setup.
-LTLA_NAME = "Stroud"
-LTLA_POPULATION = 119019
+
+# LTLA_NAME = "Stroud"
+# LTLA_POPULATION = 119019
+# FONT_FILE = "Monoid-Regular.ttf"
+
+LTLA_NAME = "Kingston upon Thames"
+LTLA_POPULATION = 177507
 FONT_FILE = "Roboto-Medium.ttf"
 
 # Approximate multiplier between confirmed cases in past 7 days and
 # actual prevalence in population, based on observing differences
 # between ONS infection survey and Zoe estimates, and reported cases.
-CASE_MULTIPLIER = 5
+
+CASE_MULTIPLIER = 4
 
 def get_cases():
     ENDPOINT = "https://api.coronavirus.data.gov.uk/v1/data"
@@ -32,7 +45,7 @@ def get_cases():
     filters = [
         f"areaType={ AREA_TYPE }",
         f"areaName={ AREA_NAME }",
-        f"date>2020-11-07"
+        f"date>2021-01-07"
     ]
 
     # Case numbers obtained from the newCasesBySpecimenDateRollingSum API field.
@@ -71,22 +84,26 @@ def main():
     cases_per_1000 = get_cases()
     try:
         display = epd1in54_V2.EPD()
-        display.init()
+        display.init(0)
         display.Clear(255)
 
         w = display.height
         h = display.width
-        bigfont = ImageFont.truetype(os.path.join(assets_dir, FONT_FILE), 120)
-        smallfont = ImageFont.truetype(os.path.join(assets_dir, FONT_FILE), 28)
+        
+        # big/small sizes may need adjusting based on font face chosen
+        bigfont = ImageFont.truetype(os.path.join(assets_dir, FONT_FILE), 80)
+        smallfont = ImageFont.truetype(os.path.join(assets_dir, FONT_FILE), 16)
 
         image = Image.new(mode='1', size=(w, h), color=255)
         draw = ImageDraw.Draw(image)
-        draw.text((0, 0), "%.1f" % cases_per_1000,
+        draw.text((0, 10), "%s" % LTLA_NAME,
+              font=smallfont, fill=0, align='left') 
+        draw.text((0, 30), "%.1f" % cases_per_1000,
               font=bigfont, fill=0, align='left')
-        draw.text((0, 130), "cases per 1000",
+        draw.text((0, 130), "COVID cases per 1000",
               font=smallfont, fill=0, align='left')
-        today = datetime.date.today()
-        draw.text((0, 160), "updated %s" % today.strftime('%d %b'),
+        now = datetime.now()
+        draw.text((0, 160), "updated %s" % now.strftime('%d %b %H:%M'),
               font=smallfont, fill=0, align='left')
         display.display(display.getbuffer(image))
 
