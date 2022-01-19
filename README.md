@@ -2,7 +2,7 @@
 
 ---
 
-*Credit:* [original code](https://github.com/annapowellsmith/scaredi-pi) by Anna Powell Smith (I was inspired by [this original Tweet](https://twitter.com/darkgreener/status/1331359454709895171))
+*Credit:* [original code](https://github.com/annapowellsmith/scaredi-pi) by Anna Powell-Smith (I was inspired by [this original Tweet](https://twitter.com/darkgreener/status/1331359454709895171))
 
 ---
 
