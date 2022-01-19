@@ -1,7 +1,6 @@
 from datetime import datetime
 import json
 import os
-import sys
 
 from PIL import Image, ImageDraw, ImageFont
 from requests import get
@@ -89,7 +88,7 @@ def main():
 
         w = display.height
         h = display.width
-        
+
         # big/small sizes may need adjusting based on font face chosen
         bigfont = ImageFont.truetype(os.path.join(assets_dir, FONT_FILE), 80)
         smallfont = ImageFont.truetype(os.path.join(assets_dir, FONT_FILE), 16)
@@ -97,7 +96,7 @@ def main():
         image = Image.new(mode='1', size=(w, h), color=255)
         draw = ImageDraw.Draw(image)
         draw.text((0, 10), "%s" % LTLA_NAME,
-              font=smallfont, fill=0, align='left') 
+              font=smallfont, fill=0, align='left')
         draw.text((0, 30), "%.1f" % cases_per_1000,
               font=bigfont, fill=0, align='left')
         draw.text((0, 130), "COVID cases per 1000",

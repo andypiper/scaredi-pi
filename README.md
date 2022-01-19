@@ -18,7 +18,8 @@ Case numbers are obtained from [the official UK coronavirus dashboard API](https
 
 ## Usage
 
-- Attach the screen to the Pi via [the pins described in the Waveshare wiki](https://www.waveshare.com/wiki/1.54inch_e-Paper_Module), and enable the SPI interface using `raspi-config`.
+- Attach the screen to the Pi via [the pins described on the Hardware/Software setup tab on the Waveshare wiki](https://www.waveshare.com/wiki/1.54inch_e-Paper_Module)
+- Enable the SPI interface using `raspi-config`.
 - Install requirements and the [waveshare_epd Python library](https://github.com/waveshare/e-Paper)
   (the latter can't be installed by pip because of the ampersand in the filepath).
 - Add a TTF font file of your choice to the `assets` directory
