@@ -14,12 +14,15 @@ This is running on a Raspberry Pi Zero W with Bullseye Raspberry Pi OS, and [1.5
 
 Case numbers are obtained from [the official UK coronavirus dashboard API](https://coronavirus.data.gov.uk/details/developers-guide), then multiplied by an estimate for the actual prevalence in the population, to reach an estimate of the approximate real case rate.
 
+_Requires the [waveshare_epd Python library](https://github.com/waveshare/e-Paper)_
+
 ## Usage
 
 - Attach the screen to the Pi via [the pins described on the Hardware/Software setup tab on the Waveshare wiki](https://www.waveshare.com/wiki/1.54inch_e-Paper_Module)
 - Enable the SPI interface using `raspi-config`
-- Install requirements and the [waveshare_epd Python library](https://github.com/waveshare/e-Paper)
-  (the latter can't be installed by pip because of the ampersand in the filepath)
+- Install requirements
+ - `pip install -r requirements.txt`
+ - `pip install -e "git+https://github.com/waveshare/e-Paper.git#egg=waveshare_epd&subdirectory=RaspberryPi_JetsonNano/python"` 
 - Add a TTF font file of your choice to the `assets` directory
 - Update the constants in the script for your chosen font and local authority
 - Update the `waveshare_epd` import and drawing commands as needed for your own e-paper screen
